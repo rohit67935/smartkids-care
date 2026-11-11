@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SmartKids AI Chat</title>
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+        body{
+            font-family:Arial, sans-serif;
+            background:#eef3ff;
+            display:flex;
+            flex-direction:column;
+            height:100vh;
+        }
+        /* HEADER */
+        h1{
+            background:#4a90e2;
+            color:white;
+            padding:15px;
+            text-align:center;
+        }
+        /* MAIN CHAT CONTAINER */
+        .chat-container{
+            flex:1;
+            width:90%;
+            max-width:700px;
+            margin:20px auto;
+            display:flex;
+            flex-direction:column;
+        }
+        /* CHAT AREA */
+        .chat-box{
+            flex:1;
+            background:white;
+            padding:15px;
+            border-radius:12px;
+            overflow-y:auto;
+            box-shadow:0px 4px 10px rgba(0,0,0,0.1);
+        }
+
+        /* MESSAGE ROW */
+        .message-row{
+            display:flex;
+            margin:10px 0;
+        }
+        .user-row{
+            justify-content:flex-end;
+        }
+        .bot-row{
+            justify-content:flex-start;
+        }
+        /* MESSAGE STYLE */
+        .msg{
+            padding:10px 12px;
+            border-radius:12px;
+            max-width:75%;
+            word-wrap:break-word;
+        }
+        .user{
+            background:#4a90e2;
+            color:white;
+        }
+        .bot{
+            background:#f1f1f1;
+            color:#333;
+        }
+        /* INPUT AREA */
+        .input-box{
+            display:flex;
+            gap:10px;
+            margin-top:15px;
+        }
+        input{
+            flex:1;
+            padding:12px;
+            border-radius:8px;
+            border:1px solid #ccc;
+            outline:none;
+            font-size:15px;
+        }
+        button{
+            padding:12px 18px;
+            border:none;
+            border-radius:8px;
+            background:#4a90e2;
+            color:white;
+            cursor:pointer;
+            font-size:15px;
+        }
+        button:hover{
+            background:#357bd8;
+        }
+        .typing{
+            color:gray;
+            font-size:12px;
+            margin-top:5px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>🤖 SmartKids Helper</h1>
+
+<div class="chat-container">
+    <div class="chat-box" id="chatbox">
+        <div class="message-row bot-row">
+            <div class="msg bot">
+                Hi 👋 I am your Smart Helper. Ask me anything!
+            </div>
+        </div>
+    </div>
+
+    <div class="input-box">
+
+        <input
+            type="text"
+            id="userInput"
+            placeholder="Type your question..."
+        >
+        <button onclick="sendMessage()">
+            Send
+        </button>
+
+    </div>
+</div>
+
+<script>
+
+function addMessage(text, className){
+    let row = document.createElement("div");
+    row.className =
+        "message-row " +
+        (className === "user" ? "user-row" : "bot-row");
+    let div = document.createElement("div");
+    div.className = "msg " + className;
+    div.innerText = text;
+    row.appendChild(div);
+    let chatbox = document.getElementById("chatbox");
+    chatbox.appendChild(row);
+    chatbox.scrollTop = chatbox.scrollHeight;
+}
+function sendMessage(){
+    let input = document.getElementById("userInput");
+    let message = input.value.trim();
+    if(message === ""){
+        return;
+    }
+    addMessage(message, "user");
+    input.value = "";
+
+    // REMOVE OLD TYPING
+    let oldTyping = document.getElementById("typing");
+
+    if(oldTyping){
+        oldTyping.remove();
+    }
+
+    // CREATE TYPING
+    let typing = document.createElement("div");
+    typing.className = "typing";
+    typing.id = "typing";
+    typing.innerText = "Bot is typing...";
+    document.getElementById("chatbox").appendChild(typing);
+    // SEND TO FLASK
+    fetch("/get_response", {
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json"
+        },
+        body:JSON.stringify({
+            message:message
+        })
+    })
+
+    .then(res => res.json())
+
+    .then(data => {
+        let typingBox = document.getElementById("typing");
+        if(typingBox){
+            typingBox.remove();
+        }
+        addMessage(data.reply, "bot");
+    })
+
+    .catch(error => {
+        let typingBox = document.getElementById("typing");
+
+        if(typingBox){
+            typingBox.remove();
+        }
+        addMessage("Server Error ❌", "bot");
+    });
+
+}
+// ENTER KEY SUPPORT
+document
+.getElementById("userInput")
+.addEventListener("keypress", function(e){
+
+    if(e.key === "Enter"){
+        sendMessage();
+    }
+});
+</script>
+</body>
+</html>
+

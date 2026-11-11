@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="text-center">
+
+    <h1 class="fw-bold">Welcome to SmartKids Care</h1>
+    <p class="text-muted">Health • Career • Relaxation • Guidance Platform</p>
+
+</div>
+
+<div class="row mt-4">
+
+    <div class="col-md-4">
+        <div class="card shadow p-3">
+            <h4>🧠 Ask Problem</h4>
+            <p>Get instant advice for your problem</p>
+            <a href="/ask" class="btn btn-primary">Start</a>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow p-3">
+            <h4>🍎 Health Tips</h4>
+            <p>Learn healthy habits and diet tips</p>
+            <a href="/health" class="btn btn-success">View</a>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow p-3">
+            <h4>🎵 Relax Music</h4>
+            <p>Calm your mind with relaxing sounds</p>
+            <a href="/music" class="btn btn-info">Listen</a>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

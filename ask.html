@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<button class="back-btn" onclick="history.back()">
+    ← Back
+</button>
+
+<div class="card shadow p-4">
+
+<h2>Ask Your Problem</h2>
+
+<form action="/result" method="POST">
+
+    <input type="text" name="problem" class="form-control" placeholder="Type your problem...">
+
+    <br>
+
+    <button class="btn btn-primary">Get Advice</button>
+
+</form>
+
+</div>
+
+{% endblock %}

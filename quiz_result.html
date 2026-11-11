@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Result</title>
+    <style>
+        .solution-box {
+            display: none;
+            background: #f1f1f1;
+            padding: 10px;
+            border-radius: 6px;
+            margin-top: 10px;
+        }
+        .solution-btn {
+            margin-top: 10px;
+            padding: 6px 14px;
+            font-size: 14px;
+            background: #4a90e2;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .solution-btn:hover {
+            background: #357bd8;
+        }
+    </style>
+</head>
+<body>
+<button class="back-btn" onclick="history.back()">
+    ← Back
+</button>
+<h1>{{ subject|capitalize }} Quiz Result 🎉</h1>
+
+<div class="card p-4 shadow text-center" style="padding: 20px; margin-bottom: 20px;">
+    <h2>Your Score: {{ score }} / {{ total }}</h2>
+</div>
+
+{% for r in results %}
+    <!-- <div class="card p-4 shadow" style="padding: 15px; margin-bottom: 15px; border-left: 5px solid {{ 'green' if r.is_correct else 'red' }};"> -->
+        <div class="card p-4 shadow" style="padding: 15px; margin-bottom: 15px; border-left: 5px solid "{{ 'green' if r.is_correct else 'red' }}">
+    <h3>{{ loop.index }}. {{ r.question }}</h3>
+
+        {% if r.is_correct %}
+            <p style="color: green;">Your answer: {{ r.user_answer }} ✅</p>
+        {% else %}
+            <p style="color: red;">Your answer: {{ r.user_answer }} ❌</p>
+            <p style="color: green;">Correct answer: {{ r.correct_answer }}</p>
+        {% endif %}
+
+        <button class="solution-btn" onclick="toggleSolution('sol{{ loop.index }}')">
+            💡 Show Solution
+        </button>
+
+        <div class="solution-box" id="sol{{ loop.index }}">
+            {{ r.solution }}
+        </div>
+    </div>
+{% endfor %}
+
+<br>
+<a href="{{ url_for('quiz_home') }}">
+    <button style="padding: 10px 20px; font-size: 16px;">Try Another Quiz 🔄</button>
+</a>
+
+<script>
+function toggleSolution(id) {
+    let box = document.getElementById(id);
+    let btn = event.target;
+
+    if (box.style.display === "block") {
+        box.style.display = "none";
+        btn.innerText = "💡 Show Solution";
+    } else {
+        box.style.display = "block";
+        btn.innerText = "🙈 Hide Solution";
+    }
+}
+</script>
+
+</body>
+</html>

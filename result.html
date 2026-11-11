@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="card shadow p-4 text-center">
+
+<h2>Result</h2>
+<p><b>Your Problem:</b> {{ input }}</p>
+
+<div class="alert alert-info mt-3">
+    {{ answer }}
+</div>
+<a href="/ask" class="btn btn-primary">Try Again</a>
+</div>
+
+{% endblock %}

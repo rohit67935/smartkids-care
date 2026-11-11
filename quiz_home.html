@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Time</title>
+</head>
+<body>
+<button class="back-btn" onclick="history.back()">
+    ← Back
+</button>
+<h1 style="text-align: center;">📝 Practice Quiz</h1>
+<p style="text-align: center;">Choose a subject to test your knowledge!</p><hr>
+
+<div class="quiz-subject-list">
+    {% for subject in subjects %}
+        <a href="{{ url_for('quiz', subject=subject) }}">
+            <div class="card p-4 shadow" style="margin-bottom: 15px; padding: 15px; text-align: center;">
+                <h2>{{ subject|capitalize }} 🧠</h2>
+            </div>
+        </a>
+    {% endfor %}
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}
+</body>
+</html>

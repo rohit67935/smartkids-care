@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ subject|capitalize }} Quiz</title>
+</head>
+<body>
+<button class="back-btn" onclick="history.back()">
+    ← Back
+</button>
+<h1>{{ subject|capitalize }} Quiz 🧠</h1>
+
+<form action="{{ url_for('quiz_submit', subject=subject) }}" method="POST">
+    {% for q in questions %}
+        {% set q_index = loop.index0 %}
+        <div class="card p-4 shadow" style="margin-bottom: 20px; padding: 15px;">
+            <h3>{{ loop.index }}. {{ q.question }}</h3>
+            {% for option in q.options %}
+                <label style="display: block; margin: 8px 0;">
+                    <input type="radio" name="q{{ q_index }}" value="{{ option }}" required>
+                    {{ option }}
+                </label>
+            {% endfor %}
+        </div>
+    {% endfor %}
+
+    <button type="submit" style="padding: 10px 20px; font-size: 16px;">Submit Quiz ✅</button>
+</form>
+
+</body>
+</html>
